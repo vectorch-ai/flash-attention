@@ -443,7 +443,7 @@ inline __device__ void compute_dq_dk_dv_1colblock(const Params &params, const in
     constexpr int AtomLayoutMS = Kernel_traits::AtomLayoutMSdP;
     constexpr bool Double_buffer = !Kernel_traits::No_double_buffer;
 
-    const BlockInfo</*Varlen=*/!Is_even_MN> binfo(params, bidb);
+    const BlockInfo</*Varlen=*/!Is_even_MN> binfo(params, bidb, bidh);
     if (n_block * kBlockN >= binfo.actual_seqlen_k || binfo.actual_seqlen_q == 0) return;
 
     int m_block_max = cute::ceil_div(binfo.actual_seqlen_q, kBlockM);
@@ -1133,7 +1133,7 @@ inline __device__ void compute_dq_dk_dv_1rowblock(const Params &params, const in
     constexpr int MMA_N_SdP = kBlockN / decltype(size<1>(typename Kernel_traits::TiledMmaSdP::TiledShape_MNK{}))::value;
     constexpr int AtomLayoutMS = Kernel_traits::AtomLayoutMSdP;
 
-    const BlockInfo</*Varlen=*/!Is_even_N> binfo(params, bidb);
+    const BlockInfo</*Varlen=*/!Is_even_N> binfo(params, bidb, bidh);
     if (m_block * kBlockM >= binfo.actual_seqlen_q || binfo.actual_seqlen_k == 0) return;
 
     int n_block_max = cute::ceil_div(binfo.actual_seqlen_k, kBlockN);
